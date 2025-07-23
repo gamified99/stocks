@@ -1,46 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Gamified Stock Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
-      font-family: 'Orbitron', sans-serif;
-      background-color: #0f1117;
-      color: #ffffff;
+      background-color: #0d1117;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
-    h1 {
+    header {
+      background-color: #161b22;
+      padding: 20px;
       text-align: center;
-      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: bold;
+      border-bottom: 1px solid #30363d;
+    }
+    .tab-bar {
+      display: flex;
+      overflow-x: auto;
+      background-color: #161b22;
+      border-bottom: 1px solid #30363d;
+    }
+    .tab-bar button {
+      flex: 1;
+      padding: 12px;
+      background: none;
+      color: white;
+      border: none;
+      border-right: 1px solid #30363d;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .tab-bar button:hover, .tab-bar button.active {
+      background-color: #21262d;
     }
     .chart-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-      gap: 30px;
+      padding: 20px;
     }
-canvas {
-  background-color: transparent; /* keep canvas see-through */
-  border-radius: 8px;
-}
-
-.card {
-  background-color: #181a20; /* slightly lighter than body */
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.05); /* soft glow */
-}
-
+    canvas {
+      background-color: #0d1117;
+      max-width: 100%;
     }
   </style>
 </head>
 <body>
-  <h1>🎮 Gamified Fantasy Stock Dashboard</h1>
-  <div class="chart-container" id="chartContainer"></div>
-  <script src="script.js"></script>
+
+<header>🎮 Gamified Stock Dashboard</header>
+<div class="tab-bar" id="gameTabs"></div>
+<div class="chart-container">
+  <canvas id="trendChart" height="400"></canvas>
+</div>
+
+<script>
+  const gameList = [
+    "Fortnite",
+    "Valorant",
+    "Among Us",
+    "Mini Militia",
+    "Minecraft",
+    "Call of Duty",
+    "GTA V",
+    "Clash of Clans",
+    "Candy Crush",
+    "Free Fire"
+  ];
+
+  let trendData = {};
+  let currentChart;
+
+  // Load local trends.json
+  fetch('trends.json')
+    .then(response => response.json())
+    .then(data => {
+      trendData = data.default.timelineData;
+      setupTabs();
+      renderChart(gameList[0]); // default game
+    });
+
+  function setupTabs() {
+    const tabBar = document.getElementById('gameTabs');
+    gameList.forEach(game => {
+      const button = document.createElement('button');
+      button.innerText = game;
+      button.onclick = () => {
+        document.querySelectorAll('.tab-bar button').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        renderChart(game);
+      };
+      if (game === gameList[0]) button.classList.add('active');
+      tabBar.appendChild(button);
+    });
+  }
+
+  function renderChart(game) {
+    const labels = trendData.map(item => item.formattedTime);
+    const gameIndex = trendData[0].value.length === gameList.length ? gameList.indexOf(game) : 0;
+    const values = trendData.map(item => item.value[gameIndex]);
+
+    const chartConfig = {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: `${game} Hype Score`,
+          data: values,
+          borderColor: '#1f6feb',
+          backgroundColor: 'rgba(31, 111, 235, 0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            ticks: { color: '#c9d1d9' }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { color: '#c9d1d9' }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#c9d1d9'
+            }
+          }
+        }
+      }
+    };
+
+    if (currentChart) {
+      currentChart.destroy();
+    }
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    currentChart = new Chart(ctx, chartConfig);
+  }
+</script>
+
 </body>
 </html>
