@@ -39,7 +39,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
     }
 
     .header-subtitle {
@@ -70,14 +69,13 @@
     .stat-card:hover {
       transform: translateY(-8px);
       border-color: rgba(59, 130, 246, 0.4);
-      box-shadow: 0 12px 48px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
     }
 
     .stat-value {
       font-size: 32px;
       font-weight: 900;
       margin-bottom: 8px;
-      text-shadow: 0 0 10px currentColor;
     }
 
     .stat-label {
@@ -134,7 +132,7 @@
       background: rgba(51, 65, 85, 0.9);
       transform: scale(1.05);
       color: #e2e8f0;
-      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
     }
 
     .tab-button.active {
@@ -142,7 +140,7 @@
       border: 2px solid rgba(255, 255, 255, 0.2);
       color: white;
       font-weight: 700;
-      box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     .chart-section {
@@ -167,7 +165,6 @@
       font-size: 32px;
       font-weight: 800;
       color: #f1f5f9;
-      text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
     }
 
     .trend-info {
@@ -182,12 +179,61 @@
       font-size: 42px;
       font-weight: 900;
       margin-bottom: 8px;
-      text-shadow: 0 0 15px currentColor;
     }
 
     .trend-change {
       font-size: 18px;
       font-weight: 700;
+    }
+
+    .chart-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .time-period-selector {
+      display: flex;
+      gap: 8px;
+      background: rgba(30, 41, 59, 0.6);
+      padding: 8px;
+      border-radius: 15px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .period-button {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      min-width: 50px;
+    }
+
+    .period-button:hover {
+      background: rgba(59, 130, 246, 0.2);
+      color: #e2e8f0;
+    }
+
+    .period-button.active {
+      background: linear-gradient(45deg, #3b82f6, #06b6d4);
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .chart-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: #94a3b8;
+      font-size: 14px;
     }
 
     .chart-container {
@@ -216,6 +262,15 @@
 
       .container {
         padding: 15px;
+      }
+
+      .chart-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .time-period-selector {
+        justify-content: center;
       }
     }
 
@@ -278,6 +333,20 @@
         <div class="trend-change positive" id="trendChange">+5</div>
       </div>
     </div>
+    
+    <div class="chart-controls">
+      <div class="time-period-selector">
+        <button class="period-button" data-period="1M">1M</button>
+        <button class="period-button active" data-period="1Y">1Y</button>
+        <button class="period-button" data-period="3Y">3Y</button>
+      </div>
+      <div class="chart-info">
+        <span id="periodInfo">Last 12 months</span>
+        <span>•</span>
+        <span id="dataPoints">12 data points</span>
+      </div>
+    </div>
+
     <div class="chart-container">
       <canvas id="gameChart"></canvas>
     </div>
@@ -287,78 +356,199 @@
 <script>
   const gameData = {
     "Fortnite": {
-      trendScores: [65, 70, 68, 75, 78, 82, 79, 85, 88, 90, 85, 80],
-      current: 85,
-      change: 5,
-      changePercent: 6.25
+      "1M": {
+        trendScores: [78, 80, 82, 85, 83, 81, 84, 86, 85, 87, 85, 80, 82, 85, 83, 79, 81, 84, 86, 88, 85, 82, 80, 83, 85, 87, 84, 82, 85, 85],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 85,
+        change: 5,
+        changePercent: 6.25
+      },
+      "1Y": {
+        trendScores: [65, 70, 68, 75, 78, 82, 79, 85, 88, 90, 85, 80],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 85,
+        change: 5,
+        changePercent: 6.25
+      },
+      "3Y": {
+        trendScores: [45, 52, 58, 65, 72, 78, 82, 85, 88, 90, 85, 80, 75, 70, 68, 72, 75, 78, 82, 85, 88, 90, 87, 84, 82, 80, 78, 82, 85, 88, 90, 85, 82, 80, 85, 85],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 85,
+        change: 5,
+        changePercent: 6.25
+      }
     },
     "Valorant": {
-      trendScores: [45, 50, 55, 60, 65, 70, 68, 72, 75, 78, 80, 82],
-      current: 82,
-      change: 2,
-      changePercent: 2.50
+      "1M": {
+        trendScores: [78, 79, 80, 82, 81, 83, 82, 84, 83, 85, 82, 80, 81, 83, 84, 82, 83, 82, 84, 83, 82, 81, 80, 82, 83, 84, 82, 81, 82, 82],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 82,
+        change: 2,
+        changePercent: 2.50
+      },
+      "1Y": {
+        trendScores: [45, 50, 55, 60, 65, 70, 68, 72, 75, 78, 80, 82],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 82,
+        change: 2,
+        changePercent: 2.50
+      },
+      "3Y": {
+        trendScores: [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 68, 72, 75, 78, 80, 82, 80, 78, 76, 78, 80, 82, 81, 79, 80, 81, 82, 80, 81, 82, 81, 80, 81, 82],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 82,
+        change: 2,
+        changePercent: 2.50
+      }
     },
     "Among Us": {
-      trendScores: [90, 85, 75, 60, 45, 35, 30, 28, 25, 22, 20, 18],
-      current: 18,
-      change: -2,
-      changePercent: -10.00
+      "1M": {
+        trendScores: [20, 19, 18, 20, 18, 17, 19, 18, 16, 18, 17, 16, 18, 19, 17, 16, 18, 17, 16, 18, 17, 16, 15, 17, 18, 16, 15, 17, 18, 18],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 18,
+        change: -2,
+        changePercent: -10.00
+      },
+      "1Y": {
+        trendScores: [90, 85, 75, 60, 45, 35, 30, 28, 25, 22, 20, 18],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 18,
+        change: -2,
+        changePercent: -10.00
+      },
+      "3Y": {
+        trendScores: [5, 8, 12, 25, 50, 85, 95, 90, 80, 60, 40, 30, 25, 22, 20, 18, 16, 15, 18, 20, 22, 18, 16, 15, 17, 18, 16, 15, 17, 18, 19, 18, 17, 16, 17, 18],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 18,
+        change: -2,
+        changePercent: -10.00
+      }
     },
     "Minecraft": {
-      trendScores: [80, 82, 85, 88, 90, 92, 90, 88, 85, 87, 89, 91],
-      current: 91,
-      change: 2,
-      changePercent: 2.25
+      "1M": {
+        trendScores: [89, 90, 91, 90, 92, 91, 90, 91, 92, 90, 89, 91, 92, 90, 91, 92, 90, 89, 91, 92, 90, 91, 90, 92, 91, 90, 91, 92, 90, 91],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 91,
+        change: 2,
+        changePercent: 2.25
+      },
+      "1Y": {
+        trendScores: [80, 82, 85, 88, 90, 92, 90, 88, 85, 87, 89, 91],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 91,
+        change: 2,
+        changePercent: 2.25
+      },
+      "3Y": {
+        trendScores: [75, 78, 80, 82, 85, 87, 88, 90, 92, 90, 88, 86, 85, 87, 89, 91, 90, 88, 90, 92, 91, 89, 90, 91, 92, 90, 89, 90, 91, 92, 90, 91, 90, 89, 90, 91],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 91,
+        change: 2,
+        changePercent: 2.25
+      }
     },
     "GTA V": {
-      trendScores: [70, 72, 68, 65, 67, 69, 71, 73, 75, 77, 74, 76],
-      current: 76,
-      change: 2,
-      changePercent: 2.70
+      "1M": {
+        trendScores: [74, 75, 76, 75, 77, 76, 75, 76, 77, 75, 74, 76, 77, 75, 76, 77, 75, 74, 76, 77, 75, 76, 75, 77, 76, 75, 76, 77, 75, 76],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 76,
+        change: 2,
+        changePercent: 2.70
+      },
+      "1Y": {
+        trendScores: [70, 72, 68, 65, 67, 69, 71, 73, 75, 77, 74, 76],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 76,
+        change: 2,
+        changePercent: 2.70
+      },
+      "3Y": {
+        trendScores: [65, 68, 70, 72, 70, 68, 70, 72, 74, 76, 75, 73, 70, 72, 74, 76, 75, 73, 75, 77, 76, 74, 75, 76, 77, 75, 74, 75, 76, 77, 75, 76, 75, 74, 75, 76],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 76,
+        change: 2,
+        changePercent: 2.70
+      }
     },
     "Call of Duty": {
-      trendScores: [75, 78, 80, 82, 79, 77, 75, 73, 71, 69, 67, 65],
-      current: 65,
-      change: -2,
-      changePercent: -2.99
+      "1M": {
+        trendScores: [67, 66, 65, 67, 65, 64, 66, 65, 63, 65, 64, 63, 65, 66, 64, 63, 65, 64, 63, 65, 64, 63, 62, 64, 65, 63, 62, 64, 65, 65],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 65,
+        change: -2,
+        changePercent: -2.99
+      },
+      "1Y": {
+        trendScores: [75, 78, 80, 82, 79, 77, 75, 73, 71, 69, 67, 65],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 65,
+        change: -2,
+        changePercent: -2.99
+      },
+      "3Y": {
+        trendScores: [85, 82, 80, 78, 80, 82, 80, 78, 76, 74, 75, 73, 75, 78, 80, 82, 79, 77, 75, 73, 71, 69, 67, 65, 66, 68, 67, 65, 66, 68, 67, 65, 66, 65, 66, 65],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 65,
+        change: -2,
+        changePercent: -2.99
+      }
     },
     "Apex Legends": {
-      trendScores: [60, 62, 65, 68, 70, 72, 75, 77, 74, 71, 68, 66],
-      current: 66,
-      change: -2,
-      changePercent: -2.94
+      "1M": {
+        trendScores: [68, 67, 66, 68, 66, 65, 67, 66, 64, 66, 65, 64, 66, 67, 65, 64, 66, 65, 64, 66, 65, 64, 63, 65, 66, 64, 63, 65, 66, 66],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 66,
+        change: -2,
+        changePercent: -2.94
+      },
+      "1Y": {
+        trendScores: [60, 62, 65, 68, 70, 72, 75, 77, 74, 71, 68, 66],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 66,
+        change: -2,
+        changePercent: -2.94
+      },
+      "3Y": {
+        trendScores: [45, 48, 52, 55, 58, 60, 62, 65, 68, 70, 72, 75, 77, 74, 71, 68, 66, 64, 66, 68, 67, 65, 66, 67, 68, 66, 65, 66, 67, 68, 66, 66, 65, 64, 65, 66],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 66,
+        change: -2,
+        changePercent: -2.94
+      }
     },
     "Roblox": {
-      trendScores: [55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92],
-      current: 92,
-      change: 4,
-      changePercent: 4.55
-    },
-    "Fall Guys": {
-      trendScores: [95, 90, 80, 65, 45, 30, 25, 20, 15, 12, 10, 8],
-      current: 8,
-      change: -2,
-      changePercent: -20.00
-    },
-    "PUBG": {
-      trendScores: [85, 80, 75, 70, 65, 60, 58, 56, 54, 52, 50, 48],
-      current: 48,
-      change: -2,
-      changePercent: -4.00
+      "1M": {
+        trendScores: [90, 91, 92, 91, 93, 92, 91, 92, 93, 91, 90, 92, 93, 91, 92, 93, 91, 90, 92, 93, 91, 92, 91, 93, 92, 91, 92, 93, 91, 92],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 92,
+        change: 4,
+        changePercent: 4.55
+      },
+      "1Y": {
+        trendScores: [55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 92,
+        change: 4,
+        changePercent: 4.55
+      },
+      "3Y": {
+        trendScores: [35, 38, 42, 45, 48, 52, 55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92, 90, 88, 90, 92, 91, 89, 90, 91, 92, 90, 91, 92, 91, 92, 91, 90, 91, 92],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 92,
+        change: 4,
+        changePercent: 4.55
+      }
     }
   };
 
-  const timeLabels = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-  ];
-
   let chart;
   let currentGame = "Fortnite";
+  let currentPeriod = "1Y";
 
   function initializeDashboard() {
     setupTabs();
-    renderChart(currentGame);
+    setupPeriodSelector();
+    renderChart(currentGame, currentPeriod);
   }
 
   function setupTabs() {
@@ -374,25 +564,50 @@
       }
       
       button.addEventListener("click", () => {
-        // Remove active class from all buttons
         document.querySelectorAll(".tab-button").forEach(btn => {
           btn.classList.remove("active");
         });
         
-        // Add active class to clicked button
         button.classList.add("active");
-        
-        // Update chart
         currentGame = gameName;
-        renderChart(gameName);
+        renderChart(currentGame, currentPeriod);
       });
       
       tabContainer.appendChild(button);
     });
   }
 
-  function updateTrendInfo(gameName) {
-    const game = gameData[gameName];
+  function setupPeriodSelector() {
+    const periodButtons = document.querySelectorAll(".period-button");
+    
+    periodButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        periodButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        
+        currentPeriod = button.dataset.period;
+        renderChart(currentGame, currentPeriod);
+        updatePeriodInfo(currentPeriod);
+      });
+    });
+  }
+
+  function updatePeriodInfo(period) {
+    const periodInfo = document.getElementById("periodInfo");
+    const dataPoints = document.getElementById("dataPoints");
+    
+    const info = {
+      "1M": { text: "Last 30 days", points: "30 data points" },
+      "1Y": { text: "Last 12 months", points: "12 data points" },
+      "3Y": { text: "Last 3 years", points: "12 quarterly points" }
+    };
+    
+    periodInfo.textContent = info[period].text;
+    dataPoints.textContent = info[period].points;
+  }
+
+  function updateTrendInfo(gameName, period) {
+    const game = gameData[gameName][period];
     const titleElement = document.getElementById("chartTitle");
     const trendElement = document.getElementById("currentTrend");
     const changeElement = document.getElementById("trendChange");
@@ -400,18 +615,15 @@
     titleElement.textContent = gameName;
     trendElement.textContent = game.current;
     
-    // Clean number display - just show the change number with + or -
     const changeText = `${game.change >= 0 ? '+' : ''}${game.change}`;
     changeElement.textContent = changeText;
     changeElement.className = `trend-change ${game.change >= 0 ? 'positive' : 'negative'}`;
-    
-    // Update the trend score color
     trendElement.className = `current-trend ${game.change >= 0 ? 'positive' : 'negative'}`;
   }
 
-  function renderChart(gameName) {
-    const game = gameData[gameName];
-    updateTrendInfo(gameName);
+  function renderChart(gameName, period) {
+    const game = gameData[gameName][period];
+    updateTrendInfo(gameName, period);
     
     const ctx = document.getElementById("gameChart").getContext("2d");
     
@@ -419,12 +631,10 @@
       chart.destroy();
     }
 
-    // Create gradient for the line
     const gradientStroke = ctx.createLinearGradient(0, 0, 0, 400);
     gradientStroke.addColorStop(0, game.change >= 0 ? '#10f981' : '#f87171');
     gradientStroke.addColorStop(1, game.change >= 0 ? '#059669' : '#dc2626');
 
-    // Create gradient fill
     const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
     gradientFill.addColorStop(0, game.change >= 0 ? 'rgba(16, 249, 129, 0.3)' : 'rgba(248, 113, 113, 0.3)');
     gradientFill.addColorStop(1, 'rgba(16, 249, 129, 0.05)');
@@ -432,7 +642,7 @@
     chart = new Chart(ctx, {
       type: "line",
       data: {
-        labels: timeLabels,
+        labels: game.labels,
         datasets: [{
           label: `${gameName} Trend`,
           data: game.trendScores,
@@ -444,8 +654,8 @@
           pointBackgroundColor: game.change >= 0 ? '#10f981' : '#f87171',
           pointBorderColor: '#1e293b',
           pointBorderWidth: 3,
-          pointRadius: 8,
-          pointHoverRadius: 12,
+          pointRadius: period === '1M' ? 4 : 8,
+          pointHoverRadius: period === '1M' ? 6 : 12,
           pointHoverBackgroundColor: game.change >= 0 ? '#34f9a1' : '#fca5a5',
           pointHoverBorderWidth: 4
         }]
@@ -473,7 +683,8 @@
               font: {
                 size: 14,
                 weight: '600'
-              }
+              },
+              maxTicksLimit: period === '1M' ? 10 : undefined
             }
           },
           y: {
@@ -509,6 +720,7 @@
   // Initialize the dashboard when the page loads
   document.addEventListener('DOMContentLoaded', function() {
     initializeDashboard();
+    updatePeriodInfo(currentPeriod);
   });
 </script>
 
