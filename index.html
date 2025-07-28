@@ -2,165 +2,441 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Stock Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Stock Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #0d1117;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
       color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
     }
 
     header {
       text-align: center;
-      padding: 20px;
-      font-size: 28px;
+      padding: 30px 0;
+      margin-bottom: 30px;
+    }
+
+    .header-title {
+      font-size: 48px;
       font-weight: bold;
-      background-color: #161b22;
-      border-bottom: 2px solid #30363d;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header-subtitle {
+      font-size: 18px;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .positive {
+      color: #4ade80;
+    }
+
+    .negative {
+      color: #f87171;
+    }
+
+    .tabs-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 10px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .tabs {
       display: flex;
-      overflow-x: auto;
-      background-color: #161b22;
-      border-bottom: 1px solid #30363d;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
     }
 
-    .tabs button {
-      flex: 1;
-      padding: 10px 15px;
-      background: none;
+    .tab-button {
+      background: rgba(255, 255, 255, 0.1);
       border: none;
       color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
       cursor: pointer;
-      border-right: 1px solid #30363d;
       font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
     }
 
-    .tabs button.active,
-    .tabs button:hover {
-      background-color: #21262d;
+    .tab-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .tab-button.active {
+      background: linear-gradient(45deg, #4ade80, #22d3ee);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
+    }
+
+    .chart-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .chart-title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .price-info {
+      text-align: right;
+    }
+
+    .current-price {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .price-change {
+      font-size: 16px;
+      font-weight: 500;
     }
 
     .chart-container {
-      padding: 20px;
+      position: relative;
+      height: 400px;
+      margin-top: 20px;
     }
 
-    canvas {
-      background-color: #0d1117;
-      max-width: 100%;
+    @media (max-width: 768px) {
+      .header-title {
+        font-size: 36px;
+      }
+      
+      .chart-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .price-info {
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
 
-<header>📈 Static Stock Dashboard</header>
-<div class="tabs" id="stockTabs"></div>
-<div class="chart-container">
-  <canvas id="stockChart" height="400"></canvas>
+<div class="container">
+  <header>
+    <div class="header-title">📈 Stock Market Dashboard</div>
+    <div class="header-subtitle">Real-time stock analysis and trends</div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value positive">+2.4%</div>
+      <div class="stat-label">Market Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">1,247</div>
+      <div class="stat-label">Active Stocks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value positive">+$12.5B</div>
+      <div class="stat-label">Volume</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value negative">-0.8%</div>
+      <div class="stat-label">Tech Sector</div>
+    </div>
+  </div>
+
+  <div class="tabs-container">
+    <div class="tabs" id="stockTabs"></div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-header">
+      <div class="chart-title" id="chartTitle">Apple Inc. (AAPL)</div>
+      <div class="price-info">
+        <div class="current-price" id="currentPrice">$175.00</div>
+        <div class="price-change positive" id="priceChange">+$2.50 (+1.45%)</div>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="stockChart"></canvas>
+    </div>
+  </div>
 </div>
 
 <script>
-  const stockList = [
-    "AAPL",
-    "GOOGL", 
-    "MSFT",
-    "AMZN",
-    "TSLA",
-    "META",
-    "NVDA",
-    "NFLX",
-    "AMD",
-    "INTC"
-  ];
-
-  // Static stock data - prices over time
-  const staticStockData = {
-    "AAPL": [150, 152, 148, 155, 158, 162, 159, 165, 168, 172, 175, 170],
-    "GOOGL": [2800, 2850, 2780, 2900, 2920, 2950, 2880, 2970, 3000, 3050, 3100, 3080],
-    "MSFT": [330, 335, 325, 340, 345, 350, 342, 355, 360, 365, 370, 368],
-    "AMZN": [3200, 3250, 3180, 3300, 3350, 3400, 3320, 3450, 3500, 3550, 3600, 3580],
-    "TSLA": [800, 820, 780, 850, 870, 900, 860, 920, 950, 980, 1000, 990],
-    "META": [320, 330, 310, 340, 350, 360, 345, 370, 380, 390, 400, 395],
-    "NVDA": [450, 465, 440, 480, 490, 510, 485, 520, 540, 560, 580, 575],
-    "NFLX": [500, 510, 490, 520, 530, 540, 525, 550, 560, 570, 580, 575],
-    "AMD": [120, 125, 115, 130, 135, 140, 132, 145, 150, 155, 160, 158],
-    "INTC": [50, 52, 48, 54, 56, 58, 55, 60, 62, 64, 66, 65]
+  const stockData = {
+    "AAPL": {
+      name: "Apple Inc.",
+      prices: [150, 152, 148, 155, 158, 162, 159, 165, 168, 172, 175, 170],
+      current: 175.00,
+      change: 2.50,
+      changePercent: 1.45
+    },
+    "GOOGL": {
+      name: "Alphabet Inc.",
+      prices: [2800, 2850, 2780, 2900, 2920, 2950, 2880, 2970, 3000, 3050, 3100, 3080],
+      current: 3080.00,
+      change: -20.00,
+      changePercent: -0.65
+    },
+    "MSFT": {
+      name: "Microsoft Corp.",
+      prices: [330, 335, 325, 340, 345, 350, 342, 355, 360, 365, 370, 368],
+      current: 368.00,
+      change: 5.25,
+      changePercent: 1.45
+    },
+    "AMZN": {
+      name: "Amazon.com Inc.",
+      prices: [3200, 3250, 3180, 3300, 3350, 3400, 3320, 3450, 3500, 3550, 3600, 3580],
+      current: 3580.00,
+      change: 15.50,
+      changePercent: 0.43
+    },
+    "TSLA": {
+      name: "Tesla Inc.",
+      prices: [800, 820, 780, 850, 870, 900, 860, 920, 950, 980, 1000, 990],
+      current: 990.00,
+      change: -10.00,
+      changePercent: -1.00
+    },
+    "META": {
+      name: "Meta Platforms",
+      prices: [320, 330, 310, 340, 350, 360, 345, 370, 380, 390, 400, 395],
+      current: 395.00,
+      change: 8.75,
+      changePercent: 2.27
+    },
+    "NVDA": {
+      name: "NVIDIA Corp.",
+      prices: [450, 465, 440, 480, 490, 510, 485, 520, 540, 560, 580, 575],
+      current: 575.00,
+      change: 12.30,
+      changePercent: 2.19
+    },
+    "NFLX": {
+      name: "Netflix Inc.",
+      prices: [500, 510, 490, 520, 530, 540, 525, 550, 560, 570, 580, 575],
+      current: 575.00,
+      change: 3.25,
+      changePercent: 0.57
+    }
   };
 
-  // Static time labels (last 12 months)
   const timeLabels = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
   let chart;
+  let currentStock = "AAPL";
 
-  // Initialize the dashboard
-  setupTabs();
-  renderChart(stockList[0]);
+  function initializeDashboard() {
+    setupTabs();
+    renderChart(currentStock);
+  }
 
   function setupTabs() {
-    const tabBar = document.getElementById("stockTabs");
-    stockList.forEach((stock, index) => {
-      const btn = document.createElement("button");
-      btn.innerText = stock;
-      if (index === 0) btn.classList.add("active");
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderChart(stock);
+    const tabContainer = document.getElementById("stockTabs");
+    
+    Object.keys(stockData).forEach((symbol, index) => {
+      const button = document.createElement("button");
+      button.className = "tab-button";
+      button.textContent = symbol;
+      
+      if (index === 0) {
+        button.classList.add("active");
+      }
+      
+      button.addEventListener("click", () => {
+        // Remove active class from all buttons
+        document.querySelectorAll(".tab-button").forEach(btn => {
+          btn.classList.remove("active");
+        });
+        
+        // Add active class to clicked button
+        button.classList.add("active");
+        
+        // Update chart
+        currentStock = symbol;
+        renderChart(symbol);
       });
-      tabBar.appendChild(btn);
+      
+      tabContainer.appendChild(button);
     });
   }
 
-  function renderChart(stock) {
-    const stockPrices = staticStockData[stock];
+  function updatePriceInfo(symbol) {
+    const stock = stockData[symbol];
+    const titleElement = document.getElementById("chartTitle");
+    const priceElement = document.getElementById("currentPrice");
+    const changeElement = document.getElementById("priceChange");
+    
+    titleElement.textContent = `${stock.name} (${symbol})`;
+    priceElement.textContent = `$${stock.current.toFixed(2)}`;
+    
+    const changeText = `${stock.change >= 0 ? '+' : ''}$${Math.abs(stock.change).toFixed(2)} (${stock.change >= 0 ? '+' : ''}${stock.changePercent.toFixed(2)}%)`;
+    changeElement.textContent = changeText;
+    changeElement.className = `price-change ${stock.change >= 0 ? 'positive' : 'negative'}`;
+  }
 
+  function renderChart(symbol) {
+    const stock = stockData[symbol];
+    updatePriceInfo(symbol);
+    
     const ctx = document.getElementById("stockChart").getContext("2d");
-    if (chart) chart.destroy();
+    
+    if (chart) {
+      chart.destroy();
+    }
+
+    const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
+    gradientFill.addColorStop(0, stock.change >= 0 ? 'rgba(74, 222, 128, 0.3)' : 'rgba(248, 113, 113, 0.3)');
+    gradientFill.addColorStop(1, 'rgba(74, 222, 128, 0.05)');
 
     chart = new Chart(ctx, {
       type: "line",
       data: {
         labels: timeLabels,
         datasets: [{
-          label: stock + " Stock Price ($)",
-          data: stockPrices,
+          label: `${symbol} Price`,
+          data: stock.prices,
+          borderColor: stock.change >= 0 ? '#4ade80' : '#f87171',
+          backgroundColor: gradientFill,
+          borderWidth: 3,
           fill: true,
-          borderColor: "#1f6feb",
-          backgroundColor: "rgba(31, 111, 235, 0.2)",
-          tension: 0.3,
-          pointBackgroundColor: "#1f6feb",
-          pointBorderColor: "#ffffff",
-          pointRadius: 4
+          tension: 0.4,
+          pointBackgroundColor: stock.change >= 0 ? '#4ade80' : '#f87171',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 8
         }]
       },
       options: {
         responsive: true,
-        animation: false, // Disable animations to make it truly static
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1000,
+          easing: 'easeInOutQuart'
+        },
         plugins: {
-          legend: { 
-            labels: { color: "#c9d1d9" }
+          legend: {
+            display: false
           }
         },
         scales: {
-          x: { 
-            ticks: { color: "#c9d1d9" },
-            grid: { color: "#30363d" }
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)',
+              borderColor: 'rgba(255, 255, 255, 0.2)'
+            },
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.8)',
+              font: {
+                size: 12,
+                weight: '500'
+              }
+            }
           },
-          y: { 
-            ticks: { color: "#c9d1d9" },
-            grid: { color: "#30363d" },
-            beginAtZero: false
+          y: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)',
+              borderColor: 'rgba(255, 255, 255, 0.2)'
+            },
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.8)',
+              font: {
+                size: 12,
+                weight: '500'
+              },
+              callback: function(value) {
+                return '$' + value.toFixed(0);
+              }
+            }
           }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        hover: {
+          animationDuration: 200
         }
       }
     });
   }
+
+  // Initialize the dashboard when the page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+  });
 </script>
 
 </body>
