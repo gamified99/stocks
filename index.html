@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Professional Stock Dashboard</title>
+  <title>Gaming Trends Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * {
@@ -147,17 +147,17 @@
       font-weight: bold;
     }
 
-    .price-info {
+    .trend-info {
       text-align: right;
     }
 
-    .current-price {
+    .current-trend {
       font-size: 28px;
       font-weight: bold;
       margin-bottom: 5px;
     }
 
-    .price-change {
+    .trend-change {
       font-size: 16px;
       font-weight: 500;
     }
@@ -178,7 +178,7 @@
         text-align: center;
       }
       
-      .price-info {
+      .trend-info {
         text-align: center;
       }
     }
@@ -188,104 +188,108 @@
 
 <div class="container">
   <header>
-    <div class="header-title">📈 Stock Market Dashboard</div>
-    <div class="header-subtitle">Real-time stock analysis and trends</div>
+    <div class="header-title">🎮 Gaming Trends Dashboard</div>
+    <div class="header-subtitle">Real-time game popularity and trend analysis</div>
   </header>
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-value positive">+2.4%</div>
-      <div class="stat-label">Market Today</div>
+      <div class="stat-value positive">+15.7%</div>
+      <div class="stat-label">Gaming Growth</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">1,247</div>
-      <div class="stat-label">Active Stocks</div>
+      <div class="stat-value">2.8B</div>
+      <div class="stat-label">Active Players</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value positive">+$12.5B</div>
-      <div class="stat-label">Volume</div>
+      <div class="stat-value positive">+42M</div>
+      <div class="stat-label">New Downloads</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value negative">-0.8%</div>
-      <div class="stat-label">Tech Sector</div>
+      <div class="stat-value negative">-3.2%</div>
+      <div class="stat-label">Battle Royale</div>
     </div>
   </div>
 
   <div class="tabs-container">
-    <div class="tabs" id="stockTabs"></div>
+    <div class="tabs" id="gameTabs"></div>
   </div>
 
   <div class="chart-section">
     <div class="chart-header">
-      <div class="chart-title" id="chartTitle">Apple Inc. (AAPL)</div>
-      <div class="price-info">
-        <div class="current-price" id="currentPrice">$175.00</div>
-        <div class="price-change positive" id="priceChange">+$2.50 (+1.45%)</div>
+      <div class="chart-title" id="chartTitle">Fortnite</div>
+      <div class="trend-info">
+        <div class="current-trend" id="currentTrend">85</div>
+        <div class="trend-change positive" id="trendChange">+5 (+6.25%)</div>
       </div>
     </div>
     <div class="chart-container">
-      <canvas id="stockChart"></canvas>
+      <canvas id="gameChart"></canvas>
     </div>
   </div>
 </div>
 
 <script>
-  const stockData = {
-    "AAPL": {
-      name: "Apple Inc.",
-      prices: [150, 152, 148, 155, 158, 162, 159, 165, 168, 172, 175, 170],
-      current: 175.00,
-      change: 2.50,
-      changePercent: 1.45
+  const gameData = {
+    "Fortnite": {
+      trendScores: [65, 70, 68, 75, 78, 82, 79, 85, 88, 90, 85, 80],
+      current: 85,
+      change: 5,
+      changePercent: 6.25
     },
-    "GOOGL": {
-      name: "Alphabet Inc.",
-      prices: [2800, 2850, 2780, 2900, 2920, 2950, 2880, 2970, 3000, 3050, 3100, 3080],
-      current: 3080.00,
-      change: -20.00,
-      changePercent: -0.65
+    "Valorant": {
+      trendScores: [45, 50, 55, 60, 65, 70, 68, 72, 75, 78, 80, 82],
+      current: 82,
+      change: 2,
+      changePercent: 2.50
     },
-    "MSFT": {
-      name: "Microsoft Corp.",
-      prices: [330, 335, 325, 340, 345, 350, 342, 355, 360, 365, 370, 368],
-      current: 368.00,
-      change: 5.25,
-      changePercent: 1.45
+    "Among Us": {
+      trendScores: [90, 85, 75, 60, 45, 35, 30, 28, 25, 22, 20, 18],
+      current: 18,
+      change: -2,
+      changePercent: -10.00
     },
-    "AMZN": {
-      name: "Amazon.com Inc.",
-      prices: [3200, 3250, 3180, 3300, 3350, 3400, 3320, 3450, 3500, 3550, 3600, 3580],
-      current: 3580.00,
-      change: 15.50,
-      changePercent: 0.43
+    "Minecraft": {
+      trendScores: [80, 82, 85, 88, 90, 92, 90, 88, 85, 87, 89, 91],
+      current: 91,
+      change: 2,
+      changePercent: 2.25
     },
-    "TSLA": {
-      name: "Tesla Inc.",
-      prices: [800, 820, 780, 850, 870, 900, 860, 920, 950, 980, 1000, 990],
-      current: 990.00,
-      change: -10.00,
-      changePercent: -1.00
+    "GTA V": {
+      trendScores: [70, 72, 68, 65, 67, 69, 71, 73, 75, 77, 74, 76],
+      current: 76,
+      change: 2,
+      changePercent: 2.70
     },
-    "META": {
-      name: "Meta Platforms",
-      prices: [320, 330, 310, 340, 350, 360, 345, 370, 380, 390, 400, 395],
-      current: 395.00,
-      change: 8.75,
-      changePercent: 2.27
+    "Call of Duty": {
+      trendScores: [75, 78, 80, 82, 79, 77, 75, 73, 71, 69, 67, 65],
+      current: 65,
+      change: -2,
+      changePercent: -2.99
     },
-    "NVDA": {
-      name: "NVIDIA Corp.",
-      prices: [450, 465, 440, 480, 490, 510, 485, 520, 540, 560, 580, 575],
-      current: 575.00,
-      change: 12.30,
-      changePercent: 2.19
+    "Apex Legends": {
+      trendScores: [60, 62, 65, 68, 70, 72, 75, 77, 74, 71, 68, 66],
+      current: 66,
+      change: -2,
+      changePercent: -2.94
     },
-    "NFLX": {
-      name: "Netflix Inc.",
-      prices: [500, 510, 490, 520, 530, 540, 525, 550, 560, 570, 580, 575],
-      current: 575.00,
-      change: 3.25,
-      changePercent: 0.57
+    "Roblox": {
+      trendScores: [55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92],
+      current: 92,
+      change: 4,
+      changePercent: 4.55
+    },
+    "Fall Guys": {
+      trendScores: [95, 90, 80, 65, 45, 30, 25, 20, 15, 12, 10, 8],
+      current: 8,
+      change: -2,
+      changePercent: -20.00
+    },
+    "PUBG": {
+      trendScores: [85, 80, 75, 70, 65, 60, 58, 56, 54, 52, 50, 48],
+      current: 48,
+      change: -2,
+      changePercent: -4.00
     }
   };
 
@@ -295,20 +299,20 @@
   ];
 
   let chart;
-  let currentStock = "AAPL";
+  let currentGame = "Fortnite";
 
   function initializeDashboard() {
     setupTabs();
-    renderChart(currentStock);
+    renderChart(currentGame);
   }
 
   function setupTabs() {
-    const tabContainer = document.getElementById("stockTabs");
+    const tabContainer = document.getElementById("gameTabs");
     
-    Object.keys(stockData).forEach((symbol, index) => {
+    Object.keys(gameData).forEach((gameName, index) => {
       const button = document.createElement("button");
       button.className = "tab-button";
-      button.textContent = symbol;
+      button.textContent = gameName;
       
       if (index === 0) {
         button.classList.add("active");
@@ -324,40 +328,40 @@
         button.classList.add("active");
         
         // Update chart
-        currentStock = symbol;
-        renderChart(symbol);
+        currentGame = gameName;
+        renderChart(gameName);
       });
       
       tabContainer.appendChild(button);
     });
   }
 
-  function updatePriceInfo(symbol) {
-    const stock = stockData[symbol];
+  function updateTrendInfo(gameName) {
+    const game = gameData[gameName];
     const titleElement = document.getElementById("chartTitle");
-    const priceElement = document.getElementById("currentPrice");
-    const changeElement = document.getElementById("priceChange");
+    const trendElement = document.getElementById("currentTrend");
+    const changeElement = document.getElementById("trendChange");
     
-    titleElement.textContent = `${stock.name} (${symbol})`;
-    priceElement.textContent = `$${stock.current.toFixed(2)}`;
+    titleElement.textContent = gameName;
+    trendElement.textContent = game.current;
     
-    const changeText = `${stock.change >= 0 ? '+' : ''}$${Math.abs(stock.change).toFixed(2)} (${stock.change >= 0 ? '+' : ''}${stock.changePercent.toFixed(2)}%)`;
+    const changeText = `${game.change >= 0 ? '+' : ''}${game.change} (${game.change >= 0 ? '+' : ''}${game.changePercent.toFixed(2)}%)`;
     changeElement.textContent = changeText;
-    changeElement.className = `price-change ${stock.change >= 0 ? 'positive' : 'negative'}`;
+    changeElement.className = `trend-change ${game.change >= 0 ? 'positive' : 'negative'}`;
   }
 
-  function renderChart(symbol) {
-    const stock = stockData[symbol];
-    updatePriceInfo(symbol);
+  function renderChart(gameName) {
+    const game = gameData[gameName];
+    updateTrendInfo(gameName);
     
-    const ctx = document.getElementById("stockChart").getContext("2d");
+    const ctx = document.getElementById("gameChart").getContext("2d");
     
     if (chart) {
       chart.destroy();
     }
 
     const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientFill.addColorStop(0, stock.change >= 0 ? 'rgba(74, 222, 128, 0.3)' : 'rgba(248, 113, 113, 0.3)');
+    gradientFill.addColorStop(0, game.change >= 0 ? 'rgba(74, 222, 128, 0.3)' : 'rgba(248, 113, 113, 0.3)');
     gradientFill.addColorStop(1, 'rgba(74, 222, 128, 0.05)');
 
     chart = new Chart(ctx, {
@@ -365,14 +369,14 @@
       data: {
         labels: timeLabels,
         datasets: [{
-          label: `${symbol} Price`,
-          data: stock.prices,
-          borderColor: stock.change >= 0 ? '#4ade80' : '#f87171',
+          label: `${gameName} Trend Score`,
+          data: game.trendScores,
+          borderColor: game.change >= 0 ? '#4ade80' : '#f87171',
           backgroundColor: gradientFill,
           borderWidth: 3,
           fill: true,
           tension: 0.4,
-          pointBackgroundColor: stock.change >= 0 ? '#4ade80' : '#f87171',
+          pointBackgroundColor: game.change >= 0 ? '#4ade80' : '#f87171',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 2,
           pointRadius: 6,
@@ -406,6 +410,8 @@
             }
           },
           y: {
+            min: 0,
+            max: 100,
             grid: {
               color: 'rgba(255, 255, 255, 0.1)',
               borderColor: 'rgba(255, 255, 255, 0.2)'
@@ -417,7 +423,7 @@
                 weight: '500'
               },
               callback: function(value) {
-                return '$' + value.toFixed(0);
+                return value + '%';
               }
             }
           }
