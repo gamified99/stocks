@@ -2,46 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Gamified Stock Dashboard</title>
+  <title>Stock Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
       background-color: #0d1117;
       color: white;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
     }
+
     header {
-      background-color: #161b22;
-      padding: 20px;
       text-align: center;
+      padding: 20px;
       font-size: 28px;
       font-weight: bold;
-      border-bottom: 1px solid #30363d;
+      background-color: #161b22;
+      border-bottom: 2px solid #30363d;
     }
-    .tab-bar {
+
+    .tabs {
       display: flex;
       overflow-x: auto;
       background-color: #161b22;
       border-bottom: 1px solid #30363d;
     }
-    .tab-bar button {
+
+    .tabs button {
       flex: 1;
-      padding: 12px;
+      padding: 10px 15px;
       background: none;
-      color: white;
       border: none;
-      border-right: 1px solid #30363d;
+      color: white;
       cursor: pointer;
+      border-right: 1px solid #30363d;
       font-size: 16px;
     }
-    .tab-bar button:hover, .tab-bar button.active {
+
+    .tabs button.active,
+    .tabs button:hover {
       background-color: #21262d;
     }
+
     .chart-container {
       padding: 20px;
     }
+
     canvas {
       background-color: #0d1117;
       max-width: 100%;
@@ -50,97 +56,110 @@
 </head>
 <body>
 
-<header>🎮 Gamified Stock Dashboard</header>
-<div class="tab-bar" id="gameTabs"></div>
+<header>📈 Static Stock Dashboard</header>
+<div class="tabs" id="stockTabs"></div>
 <div class="chart-container">
-  <canvas id="trendChart" height="400"></canvas>
+  <canvas id="stockChart" height="400"></canvas>
 </div>
 
 <script>
-  const gameList = [
-    "Fortnite",
-    "Valorant",
-    "Among Us",
-    "Mini Militia",
-    "Minecraft",
-    "Call of Duty",
-    "GTA V",
-    "Clash of Clans",
-    "Candy Crush",
-    "Free Fire"
+  const stockList = [
+    "AAPL",
+    "GOOGL", 
+    "MSFT",
+    "AMZN",
+    "TSLA",
+    "META",
+    "NVDA",
+    "NFLX",
+    "AMD",
+    "INTC"
   ];
 
-  let trendData = {};
-  let currentChart;
+  // Static stock data - prices over time
+  const staticStockData = {
+    "AAPL": [150, 152, 148, 155, 158, 162, 159, 165, 168, 172, 175, 170],
+    "GOOGL": [2800, 2850, 2780, 2900, 2920, 2950, 2880, 2970, 3000, 3050, 3100, 3080],
+    "MSFT": [330, 335, 325, 340, 345, 350, 342, 355, 360, 365, 370, 368],
+    "AMZN": [3200, 3250, 3180, 3300, 3350, 3400, 3320, 3450, 3500, 3550, 3600, 3580],
+    "TSLA": [800, 820, 780, 850, 870, 900, 860, 920, 950, 980, 1000, 990],
+    "META": [320, 330, 310, 340, 350, 360, 345, 370, 380, 390, 400, 395],
+    "NVDA": [450, 465, 440, 480, 490, 510, 485, 520, 540, 560, 580, 575],
+    "NFLX": [500, 510, 490, 520, 530, 540, 525, 550, 560, 570, 580, 575],
+    "AMD": [120, 125, 115, 130, 135, 140, 132, 145, 150, 155, 160, 158],
+    "INTC": [50, 52, 48, 54, 56, 58, 55, 60, 62, 64, 66, 65]
+  };
 
-  // Load local trends.json
-  fetch('trends.json')
-    .then(response => response.json())
-    .then(data => {
-      trendData = data.default.timelineData;
-      setupTabs();
-      renderChart(gameList[0]); // default game
-    });
+  // Static time labels (last 12 months)
+  const timeLabels = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  let chart;
+
+  // Initialize the dashboard
+  setupTabs();
+  renderChart(stockList[0]);
 
   function setupTabs() {
-    const tabBar = document.getElementById('gameTabs');
-    gameList.forEach(game => {
-      const button = document.createElement('button');
-      button.innerText = game;
-      button.onclick = () => {
-        document.querySelectorAll('.tab-bar button').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        renderChart(game);
-      };
-      if (game === gameList[0]) button.classList.add('active');
-      tabBar.appendChild(button);
+    const tabBar = document.getElementById("stockTabs");
+    stockList.forEach((stock, index) => {
+      const btn = document.createElement("button");
+      btn.innerText = stock;
+      if (index === 0) btn.classList.add("active");
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderChart(stock);
+      });
+      tabBar.appendChild(btn);
     });
   }
 
-  function renderChart(game) {
-    const labels = trendData.map(item => item.formattedTime);
-    const gameIndex = trendData[0].value.length === gameList.length ? gameList.indexOf(game) : 0;
-    const values = trendData.map(item => item.value[gameIndex]);
+  function renderChart(stock) {
+    const stockPrices = staticStockData[stock];
 
-    const chartConfig = {
-      type: 'line',
+    const ctx = document.getElementById("stockChart").getContext("2d");
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+      type: "line",
       data: {
-        labels: labels,
+        labels: timeLabels,
         datasets: [{
-          label: `${game} Hype Score`,
-          data: values,
-          borderColor: '#1f6feb',
-          backgroundColor: 'rgba(31, 111, 235, 0.2)',
+          label: stock + " Stock Price ($)",
+          data: stockPrices,
           fill: true,
-          tension: 0.3
+          borderColor: "#1f6feb",
+          backgroundColor: "rgba(31, 111, 235, 0.2)",
+          tension: 0.3,
+          pointBackgroundColor: "#1f6feb",
+          pointBorderColor: "#ffffff",
+          pointRadius: 4
         }]
       },
       options: {
         responsive: true,
-        scales: {
-          x: {
-            ticks: { color: '#c9d1d9' }
-          },
-          y: {
-            beginAtZero: true,
-            ticks: { color: '#c9d1d9' }
+        animation: false, // Disable animations to make it truly static
+        plugins: {
+          legend: { 
+            labels: { color: "#c9d1d9" }
           }
         },
-        plugins: {
-          legend: {
-            labels: {
-              color: '#c9d1d9'
-            }
+        scales: {
+          x: { 
+            ticks: { color: "#c9d1d9" },
+            grid: { color: "#30363d" }
+          },
+          y: { 
+            ticks: { color: "#c9d1d9" },
+            grid: { color: "#30363d" },
+            beginAtZero: false
           }
         }
       }
-    };
-
-    if (currentChart) {
-      currentChart.destroy();
-    }
-    const ctx = document.getElementById('trendChart').getContext('2d');
-    currentChart = new Chart(ctx, chartConfig);
+    });
   }
 </script>
 
