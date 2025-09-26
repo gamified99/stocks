@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<<<<<<< HEAD
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gamified | Economy</title>
@@ -119,11 +120,304 @@
     @media (max-width: 640px) {
       nav ul { flex-wrap: wrap; gap: 1rem; }
       .stat-cards { flex-direction: column; }
+=======
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gaming Trends Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: #e0e6ed;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 0;
+      margin-bottom: 40px;
+    }
+
+    .header-title {
+      font-size: 52px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(45deg, #00d4ff, #5b73e8, #ff6b9d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-subtitle {
+      font-size: 20px;
+      opacity: 0.8;
+      font-weight: 300;
+      color: #9ca3af;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      opacity: 0.7;
+      font-weight: 500;
+      color: #9ca3af;
+    }
+
+    .positive {
+      color: #10f981;
+    }
+
+    .negative {
+      color: #f87171;
+    }
+
+    .neutral {
+      color: #60a5fa;
+    }
+
+    .tabs-container {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 15px;
+      margin-bottom: 40px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .tab-button {
+      background: rgba(30, 41, 59, 0.8);
+      border: none;
+      color: #cbd5e1;
+      padding: 15px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .tab-button:hover {
+      background: rgba(51, 65, 85, 0.9);
+      transform: scale(1.05);
+      color: #e2e8f0;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .tab-button.active {
+      background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .chart-section {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
+      padding: 40px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .chart-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f1f5f9;
+    }
+
+    .trend-info {
+      text-align: right;
+      background: rgba(30, 41, 59, 0.6);
+      padding: 20px 25px;
+      border-radius: 20px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .current-trend {
+      font-size: 42px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .trend-change {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .chart-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .time-period-selector {
+      display: flex;
+      gap: 8px;
+      background: rgba(30, 41, 59, 0.6);
+      padding: 8px;
+      border-radius: 15px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .period-button {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      min-width: 50px;
+    }
+
+    .period-button:hover {
+      background: rgba(59, 130, 246, 0.2);
+      color: #e2e8f0;
+    }
+
+    .period-button.active {
+      background: linear-gradient(45deg, #3b82f6, #06b6d4);
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .chart-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 450px;
+      margin-top: 25px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .header-title {
+        font-size: 42px;
+      }
+      
+      .chart-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .trend-info {
+        text-align: center;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      .chart-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .time-period-selector {
+        justify-content: center;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(30, 41, 59, 0.6);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(45deg, #2563eb, #7c3aed);
+>>>>>>> 96de6b496b5b0df72f94895d056efb44cc259fa1
     }
   </style>
 </head>
 <body>
 
+<<<<<<< HEAD
 <header>
   <div class="logo">Gamified</div>
   <nav>
@@ -218,9 +512,291 @@ const gameData = {
     "1M": { labels: ["W1","W2","W3","W4"], trendScores: [65,70,72,74], current: 74, change: 9 },
     "1Y": { labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores: [60,62,65,68,70,72,74,76,75,77,78,80], current: 80, change: 20 },
     "3Y": { labels: ["2022","2023","2024"], trendScores: [55,65,78], current: 78, change: 23 }
+=======
+<div class="container">
+  <header>
+    <div class="header-title">🎮 Gaming Trends</div>
+    <div class="header-subtitle">Real-time game popularity analytics</div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value positive">15.7%</div>
+      <div class="stat-label">Gaming Growth</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value neutral">2.8B</div>
+      <div class="stat-label">Active Players</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value positive">42M</div>
+      <div class="stat-label">New Downloads</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value negative">-3.2%</div>
+      <div class="stat-label">Battle Royale</div>
+    </div>
+  </div>
+
+  <div class="tabs-container">
+    <div class="tabs" id="gameTabs"></div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-header">
+      <div class="chart-title" id="chartTitle">Fortnite</div>
+      <div class="trend-info">
+        <div class="current-trend positive" id="currentTrend">85</div>
+        <div class="trend-change positive" id="trendChange">+5</div>
+      </div>
+    </div>
+    
+    <div class="chart-controls">
+      <div class="time-period-selector">
+        <button class="period-button" data-period="1M">1M</button>
+        <button class="period-button active" data-period="1Y">1Y</button>
+        <button class="period-button" data-period="3Y">3Y</button>
+      </div>
+      <div class="chart-info">
+        <span id="periodInfo">Last 12 months</span>
+        <span>•</span>
+        <span id="dataPoints">12 data points</span>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="gameChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  const gameData = {
+    "Fortnite": {
+      "1M": {
+        trendScores: [78, 80, 82, 85, 83, 81, 84, 86, 85, 87, 85, 80, 82, 85, 83, 79, 81, 84, 86, 88, 85, 82, 80, 83, 85, 87, 84, 82, 85, 85],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 85,
+        change: 5,
+        changePercent: 6.25
+      },
+      "1Y": {
+        trendScores: [65, 70, 68, 75, 78, 82, 79, 85, 88, 90, 85, 80],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 85,
+        change: 5,
+        changePercent: 6.25
+      },
+      "3Y": {
+        trendScores: [45, 52, 58, 65, 72, 78, 82, 85, 88, 90, 85, 80, 75, 70, 68, 72, 75, 78, 82, 85, 88, 90, 87, 84, 82, 80, 78, 82, 85, 88, 90, 85, 82, 80, 85, 85],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 85,
+        change: 5,
+        changePercent: 6.25
+      }
+    },
+    "Valorant": {
+      "1M": {
+        trendScores: [78, 79, 80, 82, 81, 83, 82, 84, 83, 85, 82, 80, 81, 83, 84, 82, 83, 82, 84, 83, 82, 81, 80, 82, 83, 84, 82, 81, 82, 82],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 82,
+        change: 2,
+        changePercent: 2.50
+      },
+      "1Y": {
+        trendScores: [45, 50, 55, 60, 65, 70, 68, 72, 75, 78, 80, 82],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 82,
+        change: 2,
+        changePercent: 2.50
+      },
+      "3Y": {
+        trendScores: [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 68, 72, 75, 78, 80, 82, 80, 78, 76, 78, 80, 82, 81, 79, 80, 81, 82, 80, 81, 82, 81, 80, 81, 82],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 82,
+        change: 2,
+        changePercent: 2.50
+      }
+    },
+    "Among Us": {
+      "1M": {
+        trendScores: [20, 19, 18, 20, 18, 17, 19, 18, 16, 18, 17, 16, 18, 19, 17, 16, 18, 17, 16, 18, 17, 16, 15, 17, 18, 16, 15, 17, 18, 18],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 18,
+        change: -2,
+        changePercent: -10.00
+      },
+      "1Y": {
+        trendScores: [90, 85, 75, 60, 45, 35, 30, 28, 25, 22, 20, 18],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 18,
+        change: -2,
+        changePercent: -10.00
+      },
+      "3Y": {
+        trendScores: [5, 8, 12, 25, 50, 85, 95, 90, 80, 60, 40, 30, 25, 22, 20, 18, 16, 15, 18, 20, 22, 18, 16, 15, 17, 18, 16, 15, 17, 18, 19, 18, 17, 16, 17, 18],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 18,
+        change: -2,
+        changePercent: -10.00
+      }
+    },
+    "Minecraft": {
+      "1M": {
+        trendScores: [89, 90, 91, 90, 92, 91, 90, 91, 92, 90, 89, 91, 92, 90, 91, 92, 90, 89, 91, 92, 90, 91, 90, 92, 91, 90, 91, 92, 90, 91],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 91,
+        change: 2,
+        changePercent: 2.25
+      },
+      "1Y": {
+        trendScores: [80, 82, 85, 88, 90, 92, 90, 88, 85, 87, 89, 91],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 91,
+        change: 2,
+        changePercent: 2.25
+      },
+      "3Y": {
+        trendScores: [75, 78, 80, 82, 85, 87, 88, 90, 92, 90, 88, 86, 85, 87, 89, 91, 90, 88, 90, 92, 91, 89, 90, 91, 92, 90, 89, 90, 91, 92, 90, 91, 90, 89, 90, 91],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 91,
+        change: 2,
+        changePercent: 2.25
+      }
+    },
+    "GTA V": {
+      "1M": {
+        trendScores: [74, 75, 76, 75, 77, 76, 75, 76, 77, 75, 74, 76, 77, 75, 76, 77, 75, 74, 76, 77, 75, 76, 75, 77, 76, 75, 76, 77, 75, 76],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 76,
+        change: 2,
+        changePercent: 2.70
+      },
+      "1Y": {
+        trendScores: [70, 72, 68, 65, 67, 69, 71, 73, 75, 77, 74, 76],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 76,
+        change: 2,
+        changePercent: 2.70
+      },
+      "3Y": {
+        trendScores: [65, 68, 70, 72, 70, 68, 70, 72, 74, 76, 75, 73, 70, 72, 74, 76, 75, 73, 75, 77, 76, 74, 75, 76, 77, 75, 74, 75, 76, 77, 75, 76, 75, 74, 75, 76],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 76,
+        change: 2,
+        changePercent: 2.70
+      }
+    },
+    "Call of Duty": {
+      "1M": {
+        trendScores: [67, 66, 65, 67, 65, 64, 66, 65, 63, 65, 64, 63, 65, 66, 64, 63, 65, 64, 63, 65, 64, 63, 62, 64, 65, 63, 62, 64, 65, 65],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 65,
+        change: -2,
+        changePercent: -2.99
+      },
+      "1Y": {
+        trendScores: [75, 78, 80, 82, 79, 77, 75, 73, 71, 69, 67, 65],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 65,
+        change: -2,
+        changePercent: -2.99
+      },
+      "3Y": {
+        trendScores: [85, 82, 80, 78, 80, 82, 80, 78, 76, 74, 75, 73, 75, 78, 80, 82, 79, 77, 75, 73, 71, 69, 67, 65, 66, 68, 67, 65, 66, 68, 67, 65, 66, 65, 66, 65],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 65,
+        change: -2,
+        changePercent: -2.99
+      }
+    },
+    "Apex Legends": {
+      "1M": {
+        trendScores: [68, 67, 66, 68, 66, 65, 67, 66, 64, 66, 65, 64, 66, 67, 65, 64, 66, 65, 64, 66, 65, 64, 63, 65, 66, 64, 63, 65, 66, 66],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 66,
+        change: -2,
+        changePercent: -2.94
+      },
+      "1Y": {
+        trendScores: [60, 62, 65, 68, 70, 72, 75, 77, 74, 71, 68, 66],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 66,
+        change: -2,
+        changePercent: -2.94
+      },
+      "3Y": {
+        trendScores: [45, 48, 52, 55, 58, 60, 62, 65, 68, 70, 72, 75, 77, 74, 71, 68, 66, 64, 66, 68, 67, 65, 66, 67, 68, 66, 65, 66, 67, 68, 66, 66, 65, 64, 65, 66],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 66,
+        change: -2,
+        changePercent: -2.94
+      }
+    },
+    "Roblox": {
+      "1M": {
+        trendScores: [90, 91, 92, 91, 93, 92, 91, 92, 93, 91, 90, 92, 93, 91, 92, 93, 91, 90, 92, 93, 91, 92, 91, 93, 92, 91, 92, 93, 91, 92],
+        labels: Array.from({length: 30}, (_, i) => `${i + 1}`),
+        current: 92,
+        change: 4,
+        changePercent: 4.55
+      },
+      "1Y": {
+        trendScores: [55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        current: 92,
+        change: 4,
+        changePercent: 4.55
+      },
+      "3Y": {
+        trendScores: [35, 38, 42, 45, 48, 52, 55, 58, 62, 65, 68, 72, 75, 78, 82, 85, 88, 92, 90, 88, 90, 92, 91, 89, 90, 91, 92, 90, 91, 92, 91, 92, 91, 90, 91, 92],
+        labels: ["Q1 '22", "Q2 '22", "Q3 '22", "Q4 '22", "Q1 '23", "Q2 '23", "Q3 '23", "Q4 '23", "Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24"],
+        current: 92,
+        change: 4,
+        changePercent: 4.55
+      }
+    }
+  };
+
+  let chart;
+  let currentGame = "Fortnite";
+  let currentPeriod = "1Y";
+
+  function initializeDashboard() {
+    setupTabs();
+    setupPeriodSelector();
+    renderChart(currentGame, currentPeriod);
+  }
+
+  function setupTabs() {
+    const tabContainer = document.getElementById("gameTabs");
+    
+    Object.keys(gameData).forEach((gameName, index) => {
+      const button = document.createElement("button");
+      button.className = "tab-button";
+      button.textContent = gameName;
+      
+      if (index === 0) {
+        button.classList.add("active");
+      }
+      
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".tab-button").forEach(btn => {
+          btn.classList.remove("active");
+        });
+        
+        button.classList.add("active");
+        currentGame = gameName;
+        renderChart(currentGame, currentPeriod);
+      });
+      
+      tabContainer.appendChild(button);
+    });
+>>>>>>> 96de6b496b5b0df72f94895d056efb44cc259fa1
   }
 };
 
+<<<<<<< HEAD
 const gameTabs = document.getElementById("gameTabs");
 const games = Object.keys(gameData);
 
@@ -277,6 +853,153 @@ document.querySelectorAll(".period-button").forEach(btn=>{
   btn.addEventListener("click",()=>switchPeriod(btn.dataset.period));
 });
 updateChart();
+=======
+  function setupPeriodSelector() {
+    const periodButtons = document.querySelectorAll(".period-button");
+    
+    periodButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        periodButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        
+        currentPeriod = button.dataset.period;
+        renderChart(currentGame, currentPeriod);
+        updatePeriodInfo(currentPeriod);
+      });
+    });
+  }
+
+  function updatePeriodInfo(period) {
+    const periodInfo = document.getElementById("periodInfo");
+    const dataPoints = document.getElementById("dataPoints");
+    
+    const info = {
+      "1M": { text: "Last 30 days", points: "30 data points" },
+      "1Y": { text: "Last 12 months", points: "12 data points" },
+      "3Y": { text: "Last 3 years", points: "12 quarterly points" }
+    };
+    
+    periodInfo.textContent = info[period].text;
+    dataPoints.textContent = info[period].points;
+  }
+
+  function updateTrendInfo(gameName, period) {
+    const game = gameData[gameName][period];
+    const titleElement = document.getElementById("chartTitle");
+    const trendElement = document.getElementById("currentTrend");
+    const changeElement = document.getElementById("trendChange");
+    
+    titleElement.textContent = gameName;
+    trendElement.textContent = game.current;
+    
+    const changeText = `${game.change >= 0 ? '+' : ''}${game.change}`;
+    changeElement.textContent = changeText;
+    changeElement.className = `trend-change ${game.change >= 0 ? 'positive' : 'negative'}`;
+    trendElement.className = `current-trend ${game.change >= 0 ? 'positive' : 'negative'}`;
+  }
+
+  function renderChart(gameName, period) {
+    const game = gameData[gameName][period];
+    updateTrendInfo(gameName, period);
+    
+    const ctx = document.getElementById("gameChart").getContext("2d");
+    
+    if (chart) {
+      chart.destroy();
+    }
+
+    const gradientStroke = ctx.createLinearGradient(0, 0, 0, 400);
+    gradientStroke.addColorStop(0, game.change >= 0 ? '#10f981' : '#f87171');
+    gradientStroke.addColorStop(1, game.change >= 0 ? '#059669' : '#dc2626');
+
+    const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
+    gradientFill.addColorStop(0, game.change >= 0 ? 'rgba(16, 249, 129, 0.3)' : 'rgba(248, 113, 113, 0.3)');
+    gradientFill.addColorStop(1, 'rgba(16, 249, 129, 0.05)');
+
+    chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: game.labels,
+        datasets: [{
+          label: `${gameName} Trend`,
+          data: game.trendScores,
+          borderColor: gradientStroke,
+          backgroundColor: gradientFill,
+          borderWidth: 4,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: game.change >= 0 ? '#10f981' : '#f87171',
+          pointBorderColor: '#1e293b',
+          pointBorderWidth: 3,
+          pointRadius: period === '1M' ? 4 : 8,
+          pointHoverRadius: period === '1M' ? 6 : 12,
+          pointHoverBackgroundColor: game.change >= 0 ? '#34f9a1' : '#fca5a5',
+          pointHoverBorderWidth: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1200,
+          easing: 'easeInOutCubic'
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              color: 'rgba(71, 85, 105, 0.3)',
+              borderColor: 'rgba(71, 85, 105, 0.5)'
+            },
+            ticks: {
+              color: '#94a3b8',
+              font: {
+                size: 14,
+                weight: '600'
+              },
+              maxTicksLimit: period === '1M' ? 10 : undefined
+            }
+          },
+          y: {
+            min: 0,
+            max: 100,
+            grid: {
+              color: 'rgba(71, 85, 105, 0.3)',
+              borderColor: 'rgba(71, 85, 105, 0.5)'
+            },
+            ticks: {
+              color: '#94a3b8',
+              font: {
+                size: 14,
+                weight: '600'
+              },
+              callback: function(value) {
+                return value;
+              }
+            }
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        hover: {
+          animationDuration: 300
+        }
+      }
+    });
+  }
+
+  // Initialize the dashboard when the page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+    updatePeriodInfo(currentPeriod);
+  });
+>>>>>>> 96de6b496b5b0df72f94895d056efb44cc259fa1
 </script>
 
 </body>
