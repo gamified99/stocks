@@ -68,6 +68,19 @@
       transition: color 0.3s; display: block;
     }
     nav ul li ul li a:hover { filter: brightness(120%); }
+    nav ul li.impact ul li a { color: var(--impact-color); }
+    nav ul li.analysis ul li a { color: var(--analysis-color); }
+    nav ul li.economy ul li a { color: var(--economy-color); }
+    nav ul li.strategy ul li a { color: var(--strategy-color); }
+    nav ul li.team ul li a { color: var(--team-color); }
+
+    nav ul li ul li a {
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 0.25rem 0;
+      transition: color 0.3s;
+      display: block;
+   }
 
     .hero { text-align: center; padding: 6rem 1rem 2rem; background: rgba(10, 10, 10, 0.6); }
     .hero h2 { font-size: 2.5rem; font-family: 'Orbitron', sans-serif; color: var(--economy-color); margin-bottom: 1rem; }
@@ -130,27 +143,34 @@
       <li class="home"><a href="index.html">Home</a></li>
       <li class="impact"><a href="impact.html">Impact</a>
         <ul>
-          <li><a href="impact/valorant.html" class="impact">Valorant</a></li>
-          <li><a href="impact/fortnite.html" class="impact">Fortnite</a></li>
+          <li><a href="impact/valorant.html">Valorant</a></li>
+          <li><a href="impact/fortnite.html">Fortnite</a></li>
         </ul>
       </li>
       <li class="analysis"><a href="analysis.html">Analysis</a>
         <ul>
-          <li><a href="analysis/valorant.html" class="analysis">Valorant</a></li>
-          <li><a href="analysis/fortnite.html" class="analysis">Fortnite</a></li>
+          <li><a href="analysis/valorant.html">Valorant</a></li>
+          <li><a href="analysis/fortnite.html">Fortnite</a></li>
         </ul>
       </li>
-      <li class="economy"><a href="economy.html" class="active-tab">Economy</a>
+<li class="economy"><a href="economy.html" class="active-tab">Economy</a>
+
         <ul>
-          <li><a href="economy/valorant.html" class="economy">Valorant</a></li>
-          <li><a href="economy/fortnite.html" class="economy">Fortnite</a></li>
+          <li><a href="economy/valorant.html">Valorant</a></li>
+          <li><a href="economy/fortnite.html">Fortnite</a></li>
         </ul>
       </li>
-      <li class="strategy"><a href="strategy.html">Strategy</a></li>
+      <li class="strategy"><a href="strategy.html">Strategy</a>
+        <ul>
+          <li><a href="strategy/valorant.html">Valorant</a></li>
+          <li><a href="strategy/fortnite.html">Fortnite</a></li>
+        </ul>
+      </li>
       <li class="team"><a href="team.html">Our Team</a></li>
     </ul>
   </nav>
 </header>
+
 
 <section class="hero">
   <h2>Economy Section</h2>
