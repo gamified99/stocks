@@ -1,126 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gamified | Economy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Chakra+Petch:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root {
-      --bg: #0a0a0a;
-      --primary: #8a2be2;
-      --secondary: #ba55d3;
-      --text: #f0f0f0;
-      --card: #141414;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gamified | Economy</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Chakra+Petch:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --bg: #0a0a0a;
+  --primary: #8a2be2;
+  --secondary: #ba55d3;
+  --text: #f0f0f0;
+  --card: #141414;
 
-      --impact-color: #ff3cac;
-      --analysis-color: #38bdf8;
-      --economy-color: #f97316;
-      --strategy-color: #22c55e;
-      --team-color: #60a5fa;
-    }
+  --impact-color: #ff3cac;
+  --analysis-color: #38bdf8;
+  --economy-color: #f97316;
+  --strategy-color: #22c55e;
+  --team-color: #60a5fa;
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: 'Chakra Petch', sans-serif;
-      background: url('background.png') center/cover no-repeat fixed;
-      color: var(--text);
-      min-height: 100vh;
-    }
+body {
+  font-family: 'Chakra Petch', sans-serif;
+  background: url('background.png') center/cover no-repeat fixed;
+  color: var(--text);
+  min-height: 100vh;
+}
 
-    header {
-      background: rgba(10, 10, 10, 0.95);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .logo { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+header {
+  background: rgba(10, 10, 10, 0.95);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.logo { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--primary); }
 
-    nav ul { list-style: none; display: flex; align-items: center; }
-    nav ul li { position: relative; margin-left: 1.5rem; }
-    nav ul li a {
-      text-decoration: none; font-weight: bold; transition: all 0.3s;
-      display: block; padding: 0.25rem 0.5rem; border-bottom: none; color: inherit;
-    }
-    nav ul li.home > a { color: var(--primary); }
-    nav ul li.impact > a { color: var(--impact-color); }
-    nav ul li.analysis > a { color: var(--analysis-color); }
-    nav ul li.economy > a { color: var(--economy-color); }
-    nav ul li.strategy > a { color: var(--strategy-color); }
-    nav ul li.team > a { color: var(--team-color); }
-    nav ul li.active > a { border-bottom: 2px solid currentColor; font-weight: 900; }
-    nav ul li ul {
-      display: none; position: absolute; top: 100%; left: 0;
-      background: #111; padding: 0.8rem 1rem; border-radius: 8px; min-width: 160px; z-index: 2000;
-    }
-    nav ul li a:hover { color: var(--economy-color); }
-    nav ul li:hover ul { display: block; }
-    nav ul li ul li { margin: 0.3rem 0; }
-    nav ul li ul li a {
-      text-decoration: none; font-size: 0.95rem; padding: 0.25rem 0;
-      transition: color 0.3s; display: block;
-    }
-    nav ul li a.active-tab { border-bottom: 3px solid currentColor; }
-    nav ul li ul li a:hover { filter: brightness(120%); }
+nav ul { list-style: none; display: flex; align-items: center; }
+nav ul li { position: relative; margin-left: 1.5rem; }
+nav ul li a {
+  text-decoration: none; font-weight: bold; transition: all 0.3s;
+  display: block; padding: 0.25rem 0.5rem; border-bottom: none; color: inherit;
+}
+nav ul li.home > a { color: var(--primary); }
+nav ul li.impact > a { color: var(--impact-color); }
+nav ul li.analysis > a { color: var(--analysis-color); }
+nav ul li.economy > a { color: var(--economy-color); }
+nav ul li.strategy > a { color: var(--strategy-color); }
+nav ul li.team > a { color: var(--team-color); }
+nav ul li.active > a { border-bottom: 2px solid currentColor; font-weight: 900; }
+nav ul li ul {
+  display: none; position: absolute; top: 100%; left: 0;
+  background: #111; padding: 0.8rem 1rem; border-radius: 8px; min-width: 160px; z-index: 2000;
+}
+nav ul li a:hover { color: var(--economy-color); }
+nav ul li:hover ul { display: block; }
+nav ul li ul li { margin: 0.3rem 0; }
+nav ul li ul li a {
+  text-decoration: none; font-size: 0.95rem; padding: 0.25rem 0;
+  transition: color 0.3s; display: block;
+}
+nav ul li ul li a.impact { color: var(--impact-color); }
+nav ul li ul li a.analysis { color: var(--analysis-color); }
+nav ul li ul li a.economy { color: var(--economy-color); }
+nav ul li ul li a.strategy { color: var(--strategy-color); }
+nav ul li ul li a.team { color: var(--team-color); }
+nav ul li ul li a:hover { filter: brightness(120%); }
 
-    .hero { text-align: center; padding: 6rem 1rem 2rem; background: rgba(10, 10, 10, 0.6); }
-    .hero h2 { font-size: 2.5rem; font-family: 'Orbitron', sans-serif; color: var(--economy-color); margin-bottom: 1rem; }
-    .hero p { font-size: 1.1rem; max-width: 700px; margin: 0 auto; color: #ccc; }
+.hero { text-align: center; padding: 6rem 1rem 2rem; background: rgba(10, 10, 10, 0.6); }
+.hero h2 { font-size: 2.5rem; font-family: 'Orbitron', sans-serif; color: var(--economy-color); margin-bottom: 1rem; }
+.hero p { font-size: 1.1rem; max-width: 700px; margin: 0 auto; color: #ccc; }
 
-    .game-cards {
-      display: flex; justify-content: center; gap: 2rem; padding: 3rem 1rem; flex-wrap: wrap;
-    }
-    .game-cards a {
-      display: block; border-radius: 12px; overflow: hidden;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-      transition: transform 0.3s; max-width: 300px;
-    }
-    .game-cards a:hover { transform: scale(1.05); }
-    .game-cards img { width: 100%; display: block; }
+.game-cards {
+  display: flex; justify-content: center; gap: 2rem; padding: 3rem 1rem; flex-wrap: wrap;
+}
+.game-cards a {
+  display: block; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s; max-width: 300px;
+}
+.game-cards a:hover { transform: scale(1.05); }
+.game-cards img { width: 100%; display: block; }
 
-    /* Dashboard styles */
-    .dashboard { padding: 3rem 1rem; max-width: 1100px; margin: 0 auto; }
-    .tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    .tab-button {
-      background: #1f1f1f; border: none; padding: 0.6rem 1.2rem;
-      border-radius: 8px; cursor: pointer; font-weight: bold;
-      color: var(--text); transition: all 0.3s;
-    }
-    .tab-button.active { background: var(--economy-color); color: #fff; }
-    .stat-cards { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
-    .stat-card {
-      flex: 1; min-width: 200px; background: var(--card); border-radius: 12px;
-      padding: 1.2rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    .stat-card h3 { margin-bottom: 0.5rem; color: var(--economy-color); }
-    .trend-change.positive { color: #22c55e; }
-    .trend-change.negative { color: #ef4444; }
-    .trend-change.neutral { color: #fbbf24; }
-    .period-buttons { text-align: center; margin-bottom: 1rem; }
-    .period-button {
-      margin: 0 0.3rem; padding: 0.4rem 0.8rem; border-radius: 6px;
-      background: #1f1f1f; border: none; color: var(--text); cursor: pointer;
-    }
-    .period-button.active { background: var(--economy-color); color: #fff; }
-    .chart-container { height: 400px; background: var(--card); padding: 1rem; border-radius: 12px; }
+.dashboard { padding: 3rem 1rem; max-width: 1100px; margin: 0 auto; }
+.tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.tab-button {
+  background: #1f1f1f; border: none; padding: 0.6rem 1.2rem;
+  border-radius: 8px; cursor: pointer; font-weight: bold;
+  color: var(--text); transition: all 0.3s;
+}
+.tab-button.active { background: var(--economy-color); color: #fff; }
 
-    footer {
-      text-align: center; padding: 2rem; font-size: 0.9rem;
-      color: #777; background-color: rgba(10, 10, 10, 0.85); border-top: 1px solid #222;
-    }
+.stat-cards { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.stat-card {
+  flex: 1; min-width: 200px; background: var(--card); border-radius: 12px;
+  padding: 1.2rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.stat-card h3 { margin-bottom: 0.5rem; color: var(--economy-color); }
+.trend-change.positive { color: #22c55e; }
+.trend-change.negative { color: #ef4444; }
+.trend-change.neutral { color: #fbbf24; }
 
-    @media (max-width: 640px) {
-      nav ul { flex-wrap: wrap; gap: 1rem; }
-      .stat-cards { flex-direction: column; }
-    }
-  </style>
+.period-buttons { text-align: center; margin-bottom: 1rem; }
+.period-button {
+  margin: 0 0.3rem; padding: 0.4rem 0.8rem; border-radius: 6px;
+  background: #1f1f1f; border: none; color: var(--text); cursor: pointer;
+}
+.period-button.active { background: var(--economy-color); color: #fff; }
+
+.chart-container { height: 400px; background: var(--card); padding: 1rem; border-radius: 12px; }
+
+footer {
+  text-align: center; padding: 2rem; font-size: 0.9rem;
+  color: #777; background-color: rgba(10, 10, 10, 0.85); border-top: 1px solid #222;
+}
+
+@media (max-width: 640px) {
+  nav ul { flex-wrap: wrap; gap: 1rem; }
+  .stat-cards { flex-direction: column; }
+}
+</style>
 </head>
 <body>
 
@@ -131,28 +137,33 @@
       <li class="home"><a href="index.html">Home</a></li>
       <li class="impact"><a href="impact.html">Impact</a>
         <ul>
-          <li><a href="impact/valorant.html">Valorant</a></li>
-          <li><a href="impact/fortnite.html">Fortnite</a></li>
+          <li><a href="impact/valorant.html" class="impact">Valorant</a></li>
+          <li><a href="impact/fortnite.html" class="impact">Fortnite</a></li>
+          <li><a href="impact/amongus.html" class="impact">Among Us</a></li>
+          <li><a href="impact/minimilitia.html" class="impact">Mini Militia</a></li>
         </ul>
       </li>
       <li class="analysis"><a href="analysis.html">Analysis</a>
         <ul>
-          <li><a href="analysis/valorant.html">Valorant</a></li>
-          <li><a href="analysis/fortnite.html">Fortnite</a></li>
+          <li><a href="analysis/valorant.html" class="analysis">Valorant</a></li>
+          <li><a href="analysis/fortnite.html" class="analysis">Fortnite</a></li>
+          <li><a href="analysis/amongus.html" class="analysis">Among Us</a></li>
+          <li><a href="analysis/minimilitia.html" class="analysis">Mini Militia</a></li>
         </ul>
       </li>
       <li class="economy"><a href="economy.html" class="active-tab">Economy</a>
         <ul>
-          <li><a href="economy/valorant.html">Valorant</a></li>
-          <li><a href="economy/fortnite.html">Fortnite</a></li>
+          <li><a href="economy/valorant.html" class="economy">Valorant</a></li>
+          <li><a href="economy/fortnite.html" class="economy">Fortnite</a></li>
+          <li><a href="economy/amongus.html" class="economy">Among Us</a></li>
+          <li><a href="economy/minimilitia.html" class="economy">Mini Militia</a></li>
+          <li><a href="economy/minecraft.html" class="economy">Minecraft</a></li>
+          <li><a href="economy/roblox.html" class="economy">Roblox</a></li>
+          <li><a href="economy/cod.html" class="economy">Call of Duty</a></li>
+          <li><a href="economy/genshin.html" class="economy">Genshin Impact</a></li>
         </ul>
       </li>
-      <li class="strategy"><a href="strategy.html">Strategy</a>
-        <ul>
-          <li><a href="strategy/valorant.html">Valorant</a></li>
-          <li><a href="strategy/fortnite.html">Fortnite</a></li>
-        </ul>
-      </li>
+      <li class="strategy"><a href="strategy.html">Strategy</a></li>
       <li class="team"><a href="team.html">Our Team</a></li>
     </ul>
   </nav>
@@ -160,16 +171,14 @@
 
 <section class="hero">
   <h2>Economy Section</h2>
-  <p>Explore how in-game currencies, item shops, and creator economies are shaping Fortnite and Valorant communities.</p>
+  <p>Explore how in-game currencies, item shops, and creator economies are shaping communities of Fortnite, Valorant, Among Us, Mini Militia, and more.</p>
 </section>
 
 <section class="game-cards">
-  <a href="economy/fortnite.html">
-    <img src="fortnite.png" alt="Fortnite Economy" />
-  </a>
-  <a href="economy/valorant.html">
-    <img src="valorant.png" alt="Valorant Economy" />
-  </a>
+  <a href="economy/fortnite.html"><img src="fortnite.png" alt="Fortnite Economy" /></a>
+  <a href="economy/valorant.html"><img src="valorant.png" alt="Valorant Economy" /></a>
+  <a href="economy/amongus.html"><img src="amongus.png" alt="Among Us Economy" /></a>
+  <a href="economy/minimilitia.html"><img src="minimilitia.png" alt="Mini Militia Economy" /></a>
 </section>
 
 <section class="dashboard">
@@ -208,20 +217,34 @@
 
 <script>
 const gameData = {
-  Fortnite: {
-    "1M": { labels: ["W1","W2","W3","W4"], trendScores: [75,82,79,88], current: 88, change: 13 },
-    "1Y": { labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores: [70,74,68,80,82,78,85,90,87,92,88,95], current: 95, change: 25 },
-    "3Y": { labels: ["2022","2023","2024"], trendScores: [60,75,90], current: 90, change: 30 }
-  },
-  Valorant: {
-    "1M": { labels: ["W1","W2","W3","W4"], trendScores: [65,70,72,74], current: 74, change: 9 },
-    "1Y": { labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores: [60,62,65,68,70,72,74,76,75,77,78,80], current: 80, change: 20 },
-    "3Y": { labels: ["2022","2023","2024"], trendScores: [55,65,78], current: 78, change: 23 }
-  }
+  Fortnite: { "1M": {labels:["W1","W2","W3","W4"], trendScores:[75,82,79,88], current:88, change:13},
+              "1Y": {labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores:[70,74,68,80,82,78,85,90,87,92,88,95], current:95, change:25},
+              "3Y": {labels:["2022","2023","2024"], trendScores:[60,75,90], current:90, change:30} },
+  Valorant: { "1M": {labels:["W1","W2","W3","W4"], trendScores:[65,70,72,74], current:74, change:9},
+              "1Y": {labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores:[60,62,65,68,70,72,74,76,75,77,78,80], current:80, change:20},
+              "3Y": {labels:["2022","2023","2024"], trendScores:[55,65,78], current:78, change:23} },
+  "Among Us": { "1M": {labels:["W1","W2","W3","W4"], trendScores:[50,55,52,60], current:60, change:10},
+                "1Y": {labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores:[48,50,52,54,55,56,58,60,62,63,65,66], current:66, change:18},
+                "3Y": {labels:["2022","2023","2024"], trendScores:[40,55,66], current:66, change:26} },
+  "Mini Militia": { "1M": {labels:["W1","W2","W3","W4"], trendScores:[30,35,40,45], current:45, change:15},
+                    "1Y": {labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores:[28,30,32,34,36,38,40,42,43,45,46,47], current:47, change:19},
+                    "3Y": {labels:["2022","2023","2024"], trendScores:[25,35,47], current:47, change:22} },
+  Minecraft: { "1M": {labels:["W1","W2","W3","W4"], trendScores:[80,85,82,88], current:88, change:12},
+               "1Y": {labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores:[78,80,82,85,86,88,90,92,91,93,95,96], current:96, change:18},
+               "3Y": {labels:["2022","2023","2024"], trendScores:[70,85,96], current:96, change:26} },
+  Roblox: { "1M": {labels:["W1","W2","W3","W4"], trendScores:[60,65,68,70], current:70, change:10},
+            "1Y": {labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores:[58,60,62,65,66,68,69,70,72,74,75,76], current:76, change:18},
+            "3Y": {labels:["2022","2023","2024"], trendScores:[55,65,76], current:76, change:21} },
+  "Call of Duty": { "1M": {labels:["W1","W2","W3","W4"], trendScores:[70,72,75,78], current:78, change:8},
+                    "1Y": {labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores:[68,70,72,74,75,76,77,78,79,80,81,82], current:82, change:14},
+                    "3Y": {labels:["2022","2023","2024"], trendScores:[65,75,82], current:82, change:17} },
+  "Genshin Impact": { "1M": {labels:["W1","W2","W3","W4"], trendScores:[40,45,48,50], current:50, change:10},
+                      "1Y": {labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], trendScores:[38,40,42,44,46,48,49,50,51,52,53,54], current:54, change:16},
+                      "3Y": {labels:["2022","2023","2024"], trendScores:[35,45,54], current:54, change:19} }
 };
 
-const gameTabs = document.getElementById("gameTabs");
-const games = Object.keys(gameData);
+const gameTabs=document.getElementById("gameTabs");
+const games=Object.keys(gameData);
 
 games.forEach((game,i)=>{
   const btn=document.createElement("button");
@@ -237,12 +260,12 @@ const ctx=document.getElementById("gameChart").getContext("2d");
 let chart=new Chart(ctx,{
   type:"line",
   data:{ labels:gameData[currentGame][currentPeriod].labels,
-    datasets:[{ label:currentGame, data:gameData[currentGame][currentPeriod].trendScores,
-      borderColor:"#f97316", backgroundColor:"rgba(249,115,22,0.2)",
-      fill:true, tension:0.3, borderWidth:3, pointRadius:4, pointHoverRadius:6 } ] },
+         datasets:[{ label:currentGame, data:gameData[currentGame][currentPeriod].trendScores,
+                     borderColor:"#f97316", backgroundColor:"rgba(249,115,22,0.2)",
+                     fill:true, tension:0.3, borderWidth:3, pointRadius:4, pointHoverRadius:6 }] },
   options:{ responsive:true, maintainAspectRatio:false,
-    scales:{ y:{ ticks:{color:"#94a3b8"}, grid:{color:"rgba(249,115,22,0.1)"} },
-             x:{ ticks:{color:"#94a3b8"}, grid:{color:"rgba(249,115,22,0.1)"} } } }
+            scales:{ y:{ ticks:{color:"#94a3b8"}, grid:{color:"rgba(249,115,22,0.1)"} },
+                     x:{ ticks:{color:"#94a3b8"}, grid:{color:"rgba(249,115,22,0.1)"} } } }
 });
 
 function switchGame(game){
@@ -251,12 +274,14 @@ function switchGame(game){
   [...gameTabs.children].find(b=>b.innerText===game).classList.add("active");
   updateChart();
 }
+
 function switchPeriod(period){
   currentPeriod=period;
   document.querySelectorAll(".period-button").forEach(b=>b.classList.remove("active"));
   document.querySelector(`.period-button[data-period="${period}"]`).classList.add("active");
   updateChart();
 }
+
 function updateChart(){
   const data=gameData[currentGame][currentPeriod];
   chart.data.labels=data.labels;
@@ -272,9 +297,11 @@ function updateChart(){
     currentPeriod==="1M"?"Last 30 days":currentPeriod==="1Y"?"Last 12 months":"Last 3 years";
   document.getElementById("dataPoints").innerText=data.trendScores.length+" data points";
 }
+
 document.querySelectorAll(".period-button").forEach(btn=>{
   btn.addEventListener("click",()=>switchPeriod(btn.dataset.period));
 });
+
 updateChart();
 </script>
 
